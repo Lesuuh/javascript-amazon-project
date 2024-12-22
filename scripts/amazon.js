@@ -80,6 +80,10 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     } else {
       cart.push({ productId: productId, quantity: 1 });
     }
-    console.log(cart);
+    // to add the total quantity of items in the cart to the cart icon in the header
+    // calculate the cart length
+    const cartLength = cart.reduce((sum, item) => sum + item.quantity, 0);
+    // put the quantity on the page
+    document.querySelector(".js-cart-quantity").textContent = cartLength;
   });
 });
