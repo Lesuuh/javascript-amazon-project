@@ -57,64 +57,74 @@ products.forEach((product) => {
         </div>
     `;
 });
-
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+// add to cart
+function addToCart(productId) {
+  // ALTERNATiVE METHOD OF ADDING TO CART
+  // let matchingItem = undefined;
+
+  // cart.forEach((item) => {
+  //   if (productName === item.productName) {
+  //     matchingItem = item;
+  //   }
+  // });
+
+  // if (matchingItem) {
+  //   matchingItem.quantity += 1;
+  // } else {
+  //   cart.push({ productName: productName, quantity: 1 });
+  // }
+
+  // ADDING TO CART
+  let productQuantitySelect = document.querySelector(
+    `.js-quantity-selector-${productId}`
+  ).value;
+  productQuantitySelect = Number(productQuantitySelect);
+
+  const productInCart = cart.find((item) => item.productId === productId);
+  if (productInCart) {
+    productInCart.quantity += productQuantitySelect;
+  } else {
+    cart.push({ productId, quantity: productQuantitySelect });
+  }
+}
+
+// to add the total quantity of items in the cart to the cart icon in the header
+function addToCartIcon() {
+  const cartLength = cart.reduce((sum, item) => sum + item.quantity, 0);
+  document.querySelector(".js-cart-quantity").textContent = cartLength;
+}
+
+// add to cart message
+function addToCartMessage(addedMessageTimeout, productId) {
+  // adding the message to the button
+  const addedMessage = document.querySelector(
+    `.js-added-to-cart-message-${productId}`
+  );
+
+  addedMessage.classList.add("added-to-cart-show");
+
+  // check to see if the timeout is already running
+  if (addedMessageTimeout) {
+    clearTimeout(addedMessageTimeout);
+  }
+
+  const timeout = setTimeout(() => {
+    addedMessage.classList.remove("added-to-cart-show");
+  }, 2000);
+
+  // saving the timeout to stop it later
+  addedMessageTimeout = timeout;
+}
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   // initialize the added message timeout
   let addedMessageTimeout;
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
-
-    // ALTERNATiVE METHOD OF ADDING TO CART
-    // let matchingItem = undefined;
-
-    // cart.forEach((item) => {
-    //   if (productName === item.productName) {
-    //     matchingItem = item;
-    //   }
-    // });
-
-    // if (matchingItem) {
-    //   matchingItem.quantity += 1;
-    // } else {
-    //   cart.push({ productName: productName, quantity: 1 });
-    // }
-
-    // ADDING TO CART
-    let productQuantitySelect = document.querySelector(
-      `.js-quantity-selector-${productId}`
-    ).value;
-    productQuantitySelect = Number(productQuantitySelect);
-
-    const productInCart = cart.find((item) => item.productId === productId);
-    if (productInCart) {
-      productInCart.quantity += productQuantitySelect;
-    } else {
-      cart.push({ productId, quantity: productQuantitySelect });
-    }
-
-    // to add the total quantity of items in the cart to the cart icon in the header
-    const cartLength = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelector(".js-cart-quantity").textContent = cartLength;
-
-    // adding the message to the button
-    const addedMessage = document.querySelector(
-      `.js-added-to-cart-message-${productId}`
-    );
-
-    addedMessage.classList.add("added-to-cart-show");
-
-    // check to see if the timeout is already running
-    if (addedMessageTimeout) {
-      clearTimeout(addedMessageTimeout);
-    }
-
-    const timeout = setTimeout(() => {
-      addedMessage.classList.remove("added-to-cart-show");
-    }, 2000);
-
-    // saving the timeout to stop it later
-    addedMessageTimeout = timeout;
+    addToCart(productId);
+    addToCartIcon();
+    addToCartMessage(addedMessageTimeout, productId);
   });
 });
