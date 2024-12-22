@@ -1,3 +1,5 @@
+import { cart } from "../data/cart.js";
+
 let productsHTML = "";
 
 products.forEach((product) => {
@@ -25,7 +27,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -41,7 +43,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart js-added-to-cart">
+          <div class="added-to-cart js-added-to-cart-message-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -58,8 +60,12 @@ products.forEach((product) => {
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  // initialize the added message timeout
+  let addedMessageTimeout;
   button.addEventListener("click", () => {
-    const productId = button.dataset.productId;
+    const { productId } = button.dataset;
+
+    // ALTERNATiVE METHOD OF ADDING TO CART
     // let matchingItem = undefined;
 
     // cart.forEach((item) => {
@@ -74,16 +80,40 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     //   cart.push({ productName: productName, quantity: 1 });
     // }
 
+    // ADDING TO CART
+    let productQuantitySelect = document.querySelector(
+      `.js-quantity-selector-${productId}`
+    ).value;
+    productQuantitySelect = Number(productQuantitySelect);
+
     const productInCart = cart.find((item) => item.productId === productId);
     if (productInCart) {
-      productInCart.quantity++;
+      productInCart.quantity += productQuantitySelect;
     } else {
-      cart.push({ productId: productId, quantity: 1 });
+      cart.push({ productId, quantity: productQuantitySelect });
     }
+
     // to add the total quantity of items in the cart to the cart icon in the header
-    // calculate the cart length
     const cartLength = cart.reduce((sum, item) => sum + item.quantity, 0);
-    // put the quantity on the page
     document.querySelector(".js-cart-quantity").textContent = cartLength;
+
+    // adding the message to the button
+    const addedMessage = document.querySelector(
+      `.js-added-to-cart-message-${productId}`
+    );
+
+    addedMessage.classList.add("added-to-cart-show");
+
+    // check to see if the timeout is already running
+    if (addedMessageTimeout) {
+      clearTimeout(addedMessageTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      addedMessage.classList.remove("added-to-cart-show");
+    }, 2000);
+
+    // saving the timeout to stop it later
+    addedMessageTimeout = timeout;
   });
 });
