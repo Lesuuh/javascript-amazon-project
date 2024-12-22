@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = "";
@@ -59,40 +59,9 @@ products.forEach((product) => {
 });
 document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
-// add to cart
-function addToCart(productId) {
-  // ALTERNATiVE METHOD OF ADDING TO CART
-  // let matchingItem = undefined;
-
-  // cart.forEach((item) => {
-  //   if (productName === item.productName) {
-  //     matchingItem = item;
-  //   }
-  // });
-
-  // if (matchingItem) {
-  //   matchingItem.quantity += 1;
-  // } else {
-  //   cart.push({ productName: productName, quantity: 1 });
-  // }
-
-  // ADDING TO CART
-  let productQuantitySelect = document.querySelector(
-    `.js-quantity-selector-${productId}`
-  ).value;
-  productQuantitySelect = Number(productQuantitySelect);
-
-  const productInCart = cart.find((item) => item.productId === productId);
-  if (productInCart) {
-    productInCart.quantity += productQuantitySelect;
-  } else {
-    cart.push({ productId, quantity: productQuantitySelect });
-  }
-}
-
 // to add the total quantity of items in the cart to the cart icon in the header
 function addToCartIcon() {
-  const cartLength = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartLength = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
   document.querySelector(".js-cart-quantity").textContent = cartLength;
 }
 
