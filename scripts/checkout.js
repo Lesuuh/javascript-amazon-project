@@ -1,6 +1,6 @@
 import { cart } from "../data/cart.js";
 import { products } from "../data/products.js";
-console.log(cart);
+import { formatCurrency } from "./utils/money.js";
 
 let cartItemHTML = "";
 
@@ -10,8 +10,7 @@ cart.forEach((cartItem) => {
   const { image, priceCents, name } = product;
 
   cartItemHTML += `
-    <div class="order-summary">
-            <div class="cart-item-container js-cart-item-container">
+        <div class="cart-item-container js-cart-item-container">
                 <div class="delivery-date">
                 Delivery date: Tuesday, June 21
                 </div>
@@ -25,7 +24,7 @@ cart.forEach((cartItem) => {
                     ${name}
                     </div>
                     <div class="product-price">
-                    $${priceCents / 100} 
+                    $${formatCurrency(priceCents)} 
                     </div>
                     <div class="product-quantity">
                     <span>
@@ -49,7 +48,7 @@ cart.forEach((cartItem) => {
                     <div class="delivery-option">
                     <input type="radio" checked
                         class="delivery-option-input"
-                        name="delivery-option-1">
+                        name=${cartItem.productId}>
                     <div>
                         <div class="delivery-option-date">
                         Tuesday, June 21
@@ -62,7 +61,7 @@ cart.forEach((cartItem) => {
                     <div class="delivery-option">
                     <input type="radio"
                         class="delivery-option-input"
-                        name="delivery-option-1">
+                        name=${cartItem.productId}>
                     <div>
                         <div class="delivery-option-date">
                         Wednesday, June 15
@@ -75,7 +74,7 @@ cart.forEach((cartItem) => {
                     <div class="delivery-option">
                     <input type="radio"
                         class="delivery-option-input"
-                        name="delivery-option-1">
+                        name=${cartItem.productId}>
                     <div>
                         <div class="delivery-option-date">
                         Monday, June 13
@@ -87,10 +86,9 @@ cart.forEach((cartItem) => {
                     </div>
                 </div>
                 </div>
-            </div>
-        </div>`;
+            </div>`;
 
-  document.querySelector(".js-checkout-grid").innerHTML = cartItemHTML;
+  document.querySelector(".js-order-summary").innerHTML = cartItemHTML;
 
   const cartLength = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
 
