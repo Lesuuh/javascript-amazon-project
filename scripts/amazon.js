@@ -52,7 +52,7 @@ products.forEach((product) => {
 
           <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${
             product.id
-          }">
+          }" >
             Add to Cart
           </button>
         </div>
@@ -68,29 +68,28 @@ function addToCartIcon() {
 
 // add to cart message
 function addToCartMessage(addedMessageTimeout, productId) {
-  // adding the message to the button
   const addedMessage = document.querySelector(
     `.js-added-to-cart-message-${productId}`
   );
-
   addedMessage.classList.add("added-to-cart-show");
 
-  // check to see if the timeout is already running
   if (addedMessageTimeout) {
     clearTimeout(addedMessageTimeout);
   }
 
-  const timeout = setTimeout(() => {
+  // to remove the cartMessage after 2 secs
+  const removeMessage = setTimeout(() => {
     addedMessage.classList.remove("added-to-cart-show");
   }, 2000);
 
-  // saving the timeout to stop it later
-  addedMessageTimeout = timeout;
+  addedMessageTimeout = removeMessage;
 }
 
+let addedMessageTimeout;
+// calling all the functions when clicking add to cart button
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  // initialize the added message timeout
-  let addedMessageTimeout;
+  // initialize the settimeout
+
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
     addToCart(productId);
