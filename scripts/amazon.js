@@ -1,4 +1,4 @@
-import { cart, addToCart } from "../data/cart.js";
+import { cart, addToCart, calculateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
@@ -62,7 +62,7 @@ document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
 // to add the total quantity of items in the cart to the cart icon in the header
 function addToCartIcon() {
-  const cartLength = cart.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+  const cartLength = calculateCartQuantity();
   document.querySelector(".js-cart-quantity").textContent = cartLength;
 }
 
