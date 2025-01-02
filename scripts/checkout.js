@@ -121,7 +121,7 @@ document.querySelectorAll(".js-delivery-option-input").forEach((element) => {
 
     console.log(productId, deliveryOptionId);
 
-    // updateDeliveryOption(productId, deliveryOptionId);
+    updateDeliveryOption(productId, deliveryOptionId);
   });
 });
 
