@@ -84,3 +84,14 @@ export function updateQuantity(productId, newQuantity) {
   const filteredItems = cart.filter((item) => item.productId === productId);
   filteredItems[0].quantity = newQuantity;
 }
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  let matchingItem;
+  cart.forEach((item) => {
+    if (item.productId === productId) {
+      matchingItem = item;
+    }
+  });
+  matchingItem.deliveryOptionId = deliveryOptionId;
+  saveToStorage();
+}
