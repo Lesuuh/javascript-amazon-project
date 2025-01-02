@@ -16,12 +16,24 @@ cart.forEach((cartItem) => {
   const product = products.find((product) => product.id === productId);
   const { image, priceCents, name } = product;
 
+  const deliveryOptionId = cartItem.deliveryOptionId;
+  let deliveryOption;
+  deliveryOptions.forEach((option) => {
+    if (deliveryOptionId === option.id) {
+      deliveryOption = option;
+    }
+  });
+
+  const today = dayjs();
+  const deliveryDay = today.add(deliveryOption.deliveryDays, "day");
+  const dateString = deliveryDay.format("dddd MMMM, D");
+
   cartItemHTML += `
         <div class="cart-item-container js-cart-item-container-${
           cartItem.productId
         }">
                 <div class="delivery-date">
-                Delivery date: Tuesday, June 21
+                Delivery date: ${dateString}
                 </div>
 
                 <div class="cart-item-details-grid">
@@ -72,13 +84,12 @@ function deliveryOptionsHTML(cartItem) {
     const today = dayjs();
     const deliveryDay = today.add(deliveryOption.deliveryDays, "day");
     const dateString = deliveryDay.format("dddd MMMM, D");
-    console.log(dateString);
     const priceString =
       deliveryOption.priceCents === 0
         ? "FREE"
         : `$${formatCurrency(deliveryOption.priceCents)}`;
 
-    const isChecked = deliveryOptions.id === cartItem.deliveryOptionId;
+    const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
     html += `
         <div class="delivery-option">
@@ -106,7 +117,6 @@ document.querySelector(".js-order-summary").innerHTML = cartItemHTML;
 function updateCartQuantity() {
   const cartLengthDisplay = document.querySelector(".js-header-cart-count");
   const cartLength = calculateCartQuantity();
-  console.log(cartLength);
   if (cartLength === 0) {
     cartLengthDisplay.textContent = `No items`;
   } else if (cartLength === 1) {
