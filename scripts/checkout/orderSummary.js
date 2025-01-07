@@ -23,9 +23,8 @@ export function renderOrderSummary() {
 
     // Find the matching delivery option
     const deliveryOption = deliveryOptions.find(
-      (option) => deliveryOptionId === option.id
+      (option) => option.id === Number(deliveryOptionId)
     );
-    
 
     // // Handle case where no matching delivery option is found
     // if (!deliveryOption) {
@@ -97,28 +96,28 @@ export function renderOrderSummary() {
         priceCents === 0 ? "FREE" : `$${formatCurrency(priceCents)}`;
 
       // Check if this delivery option is selected
-      const isChecked = id === cartItem.deliveryOptionId;
+    //   const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+      const isChecked = deliveryOption.id === Number(cartItem.deliveryOptionId);
 
       // Generate HTML for this delivery option
       html += `
-         <div class="delivery-option" >
-  
-              <input type="radio"
-                ${isChecked ? "checked" : ""}
-                class="delivery-option-input js-delivery-option-input"
-                name="delivery-option-${matchingProduct.id}"
-                data-product-id="${
-                  matchingProduct.id
-                }" data-delivery-option-id="${id}">
-              <div>
-                <div class="delivery-option-date">
-                  ${dateString}
-                </div>
-                <div class="delivery-option-price">
-                  ${priceString} - Shipping
-                </div>
-              </div>
-          </div>`;
+         
+        <div class="delivery-option js-delivery-option"
+          data-product-id="${matchingProduct.id}"
+          data-delivery-option-id="${deliveryOption.id}">
+          <input type="radio"
+            ${isChecked ? "checked" : ""}
+            class="delivery-option-input"
+            name="delivery-option-${matchingProduct.id}">
+          <div>
+            <div class="delivery-option-date">
+              ${dateString}
+            </div>
+            <div class="delivery-option-price">
+              ${priceString} Shipping
+            </div>
+          </div>
+        </div>`;
     });
 
     return html;
@@ -198,7 +197,7 @@ export function renderOrderSummary() {
     });
   });
 
-  document.querySelectorAll(".js-delivery-option-input").forEach((element) => {
+  document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
       const { productId, deliveryOptionId } = element.dataset;
 

@@ -15,7 +15,7 @@ if (!cart) {
   ];
 }
 
-// saving the cart to ocal storage
+// saving the cart to local storage
 function saveToStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
@@ -92,6 +92,6 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
       matchingItem = item;
     }
   });
-  matchingItem.deliveryOptionId = deliveryOptionId;
+  matchingItem.deliveryOptionId = Number(deliveryOptionId);
   saveToStorage();
 }
