@@ -11,6 +11,12 @@ export function renderPaymentSummary() {
   let taxPrice = 0;
   let orderTotal = 0;
 
+  const totalCartQuantity = cart.reduce(
+    (sum, cartItem) => sum + cartItem.quantity,
+    0
+  );
+  console.log(totalCartQuantity);
+
   cart.forEach((cartItem) => {
     let orderPrice = 0;
     const { productId, quantity, deliveryOptionId } = cartItem;
@@ -38,14 +44,14 @@ export function renderPaymentSummary() {
   totalBeforeTax = totalShippingPrice + totalItemsPrice;
   taxPrice = totalBeforeTax * 0.1;
   orderTotal = totalBeforeTax + taxPrice;
-  console.log(orderTotal);
+  //   console.log(orderTotal);
 
   // Generate the HTML
   paymentSummaryHTML += `
       <div class="payment-summary-title">Order Summary</div>
   
       <div class="payment-summary-row">
-        <div>Items (3):</div>
+        <div>Items (${totalCartQuantity}):</div>
         <div class="payment-summary-money">$${formatCurrency(
           totalItemsPrice
         )}</div>
